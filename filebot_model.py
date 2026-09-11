@@ -7,6 +7,8 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 from langgraph.graph import StateGraph, MessagesState, START
 from langgraph.prebuilt import ToolNode, tools_condition
+from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 # ============================================================
@@ -325,11 +327,14 @@ tools = [
 # 11. LLM
 # ============================================================
 
-llm = ChatOllama(
-    model="qwen2.5:7b",
-    temperature=0
+# llm = ChatOllama(
+#     model="qwen2.5:7b",
+#     temperature=0
+# )
+load_dotenv()
+llm = ChatGoogleGenerativeAI(
+    model="gemini-3.6-flash"
 )
-
 
 llm_with_tools = llm.bind_tools(tools)
 
@@ -504,7 +509,7 @@ def main():
             response = messages[-1]
 
             print()
-            print("AI:", response.content)
+            print("AI:", response.content[0]['text'])
             print()
 
         except Exception as e:
